@@ -1,0 +1,2 @@
+https://petstore3.swagger.io/api/v3/user
+b'Logged in user session: 676407281676154880'
