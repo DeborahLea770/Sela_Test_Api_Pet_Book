@@ -131,7 +131,7 @@ def test_upload_image_byid(MPet):
     files = {'upload_file': open('slide-1.jpg', 'rb')}
     res_post = petApi.upload_image_by_id(MPet.id, files)
     assert res_post.status_code == 200
-    print(res_post.json()["message"])
+    mylogger.info(res_post.json()["message"])
 
 
 def test_get_store_inventory():
