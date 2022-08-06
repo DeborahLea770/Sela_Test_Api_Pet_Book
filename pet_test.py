@@ -194,14 +194,12 @@ def test_get_login(MUser):
     print(user_api.UserApi()._url)
     res_get = user_api.UserApi().get_login(MUser.username, MUser.password)
     assert res_get.status_code == 200
-    print(res_get.content)
 
 
 def test_get_logout():
     mylogger.info("test for get logout")
     res_get = user_api.UserApi().get_logout()
     assert res_get.status_code == 200
-    print(res_get.content)
 
 
 def test_get_username(MUser):
