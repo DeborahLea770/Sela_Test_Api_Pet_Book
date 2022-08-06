@@ -14,7 +14,7 @@ test_get_pet_bytags fails following a constant and recurring error response (500
 
 test_upload_image_byid fails
 
-test_post_users fails
+test_post_users fails following a constant and recurring error response (500)
 
 test_put_username fails
 
