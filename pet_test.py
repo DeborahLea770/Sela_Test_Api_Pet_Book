@@ -180,14 +180,13 @@ def test_post_user(MUser):
 
 
 def test_post_users(MUsers):
-    mylogger.info("test for post users")
-    users_data = []
-    for user in MUsers:
-        user_data = user.to_json()
-        users_data.append(user_data)
-    json.dumps(users_data)
-    res_post = userApi.post_users_list(users_data)
-    print(res_post)
+   mylogger.info("test for create a list of new users")
+    mylogger.info("test post users")
+    mylogger.error("this test getting error!!!")
+    users = [user.to_json() for user in MUsers]
+    users_json = json.dumps(users)
+    res_post = userApi.post_users_list(users_json)
+    assert res_post.status_code == 200
 
 
 def test_get_login(MUser):
