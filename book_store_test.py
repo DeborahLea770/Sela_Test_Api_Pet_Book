@@ -63,7 +63,7 @@ def My_String_Object() -> StringObject:
 
 @pytest.fixture()
 def My_Replace_Isbn() -> ReplaceIsbn:
-    userID = open("../Book2/models/id.txt", "r")
+    userID = open("models/id.txt", "r")
     replace_isbn = ReplaceIsbn(userID.read(), "gdghfyjfyggdsdytfj")
     return replace_isbn
 
@@ -164,8 +164,8 @@ def test_delete_books_by_string_object(My_String_Object):
 
 
 def test_put_isbn(My_Replace_Isbn, My_User):
-    userID = open("../Book2/models/id.txt", "r")
-    token = open("../Book2/models/token.txt", "r")
+    userID = open("models/id.txt", "r")
+    token = open("models/token.txt", "r")
     accountApiToken = AccountApi("https://bookstore.toolsqa.com")
     res_post = accountApiToken.post_authorized(My_User)
     res_get = accountApiToken.get_user_by_id(userID.read())
