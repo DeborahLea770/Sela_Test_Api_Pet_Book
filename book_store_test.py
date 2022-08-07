@@ -14,8 +14,8 @@ import  logging
 import datetime
 
 
-user_ID = open("id.txt", "r")
-token = open("token.txt", "r")
+user_ID = open("models/id.txt", "r")
+token = open("models/token.txt", "r")
 userIDR = user_ID.read()
 tokenR = token.read()
 accountApi = AccountApi("https://bookstore.toolsqa.com", )
@@ -120,12 +120,14 @@ def test_get_all_store_books():
 
 def test_post_books(My_List_Of_Books):
     mylogger.info("test for create list of books")
-    res_post = bookStoreApiToken.post_books(My_List_Of_Books)
-    print(res_post.text)
-    # assert res_post.status_code == 400
-    # mylogger.error(res_post.json())
-    # assert res_post.status_code == 201
-    # mylogger.info(res_post.json())
+    mylogger.error("this test getting error 504-Gateway Time-Out everytime!!!")
+    res_delete = bookStoreApiToken.delete_books_by_userid(userIDR)
+    assert res_delete.status_code == 204
+    res_post = bookStoreApiToken.post_books(My_List_Of_Books[0])
+    assert res_post.status_code == 504
+    mylogger.error("504 Gateway Time-out")
+    assert res_post.status_code == 201
+    mylogger.info(f"Success! {res_post.json()}")
 
 
 def test_delete_books_by_userid():
