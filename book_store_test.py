@@ -56,7 +56,7 @@ def My_Book() -> Book:
 
 @pytest.fixture()
 def My_String_Object() -> StringObject:
-    user_ID = open("../Book2/models/id.txt", "r")
+    user_ID = open("models/id.txt", "r")
     string_object = StringObject("928492034182304", user_ID.read())
     return string_object
 
@@ -147,10 +147,20 @@ def test_get_by_isbn():
 
 
 def test_delete_books_by_string_object(My_String_Object):
-    C = CollectionOfIsbn("928492034182304")
-    L = AddListBooks(userIDR, [C])
-    res_post = bookStoreApiToken.post_books(L)
-    mylogger.info(res_post.text)
+    mylogger.info("test for delete books by string object (isbn, userid)")
+    mylogger.error("this test getting error!!!")
+    res_get = accountApiToken.get_user_by_id(userIDR)
+    assert res_get.status_code == 200
+    res_post = bookStoreApiToken.post_books(My_String_Object[0])  # Post Request Don't Work!!!
+    assert res_post.status_code == 201  # Post Request Don't Work!!!
+    res_delete = bookStoreApiToken.delete_books_by_string_object(My_String_Object[1])
+    res_get2 = accountApiToken.get_user_by_id(userIDR)
+    assert res_delete.status_code == 204
+    mylogger.info("book deleted successfully!")
+    books_before = res_get.json()["books"]  # Post Request Don't Work!!!
+    books_after = res_get2.json()["books"]  # Post Request Don't Work!!!
+    assert len(books_after) < len(books_before)  # Post Request Don't Work!!!
+
 
 
 def test_put_isbn(My_Replace_Isbn, My_User):
