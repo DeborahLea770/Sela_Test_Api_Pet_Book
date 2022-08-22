@@ -26,7 +26,6 @@ logging.basicConfig(level=logging.INFO)
 logging.basicConfig(level=logging.ERROR)
 mylogger = logging.getLogger()
 
-
 @pytest.fixture()
 def My_Details() -> RegisterView:
     register_view = RegisterView("deborah770", "Deborah@770")
@@ -146,27 +145,29 @@ def test_get_by_isbn():
     assert res_get2.json()["isbn"] == res_get.json()["books"][0]["isbn"]
 
 
-def test_delete_books_by_string_object(My_String_Object):
+def test_delete_books_by_string_object(My_List_Of_Books,My_String_Object):
     mylogger.info("test for delete books by string object (isbn, userid)")
-    mylogger.error("this test getting error!!!")
     res_get = accountApiToken.get_user_by_id(userIDR)
     assert res_get.status_code == 200
-    res_post = bookStoreApiToken.post_books(My_String_Object[0])  # Post Request Don't Work!!!
-    assert res_post.status_code == 201  # Post Request Don't Work!!!
-    res_delete = bookStoreApiToken.delete_books_by_string_object(My_String_Object[1])
+    res_post = bookStoreApiToken.post_books(My_List_Of_Books)
+    assert res_post.status_code == 201
+    res_delete = bookStoreApiToken.delete_books_by_string_object(My_String_Object)
     res_get2 = accountApiToken.get_user_by_id(userIDR)
     assert res_delete.status_code == 204
     mylogger.info("book deleted successfully!")
-    books_before = res_get.json()["books"]  # Post Request Don't Work!!!
-    books_after = res_get2.json()["books"]  # Post Request Don't Work!!!
-    assert len(books_after) < len(books_before)  # Post Request Don't Work!!!
+    books_before = res_get.json()["books"]
+    books_after = res_get2.json()["books"]
+    assert len(books_after) < len(books_before)
 
 
+def test_put_isbn(My_List_Of_Books,My_String_Object,My_Replace_Isbn):
+    mylogger.info("test for change isbn of user's book list")
+    res_post = bookStoreApiToken.post_books(My_List_Of_Books)
+    assert res_post.status_code == 201
+    res_get = accountApiToken.get_user_by_id(userIDR)
+    assert res_get.status_code == 200
+    books = res_get.json()["books"]
+    res_put = bookStoreApi.put_isbn(books[0]["isbn"], My_Replace_Isbn)
+    assert res_put.status_code == 200
+    assert res_put.json()["books"][0]["isbn"] == My_Replace_Isbn.isbn
 
-def test_put_isbn(My_Replace_Isbn, My_User):
-    userID = open("models/id.txt", "r")
-    token = open("models/token.txt", "r")
-    accountApiToken = AccountApi("https://bookstore.toolsqa.com")
-    res_post = accountApiToken.post_authorized(My_User)
-    res_get = accountApiToken.get_user_by_id(userID.read())
-    print(res_get.json())
