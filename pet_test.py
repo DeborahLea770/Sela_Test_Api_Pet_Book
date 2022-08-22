@@ -132,6 +132,7 @@ def test_upload_image_byid(MPet):
     res_post = petApi.upload_image_by_id(MPet.id, files)
     assert res_post.status_code == 200
     mylogger.info(res_post.json()["message"])
+    assert files in petApi.get_pet_by_id(MPet.id)[1].photoUrls
 
 
 def test_get_store_inventory():
@@ -172,21 +173,23 @@ def test_delete_order(MOrder):
 def test_post_user(MUser):
     mylogger.info("test for post user")
     userApi.delete_username(MUser.username)
-    res_post = userApi.post_user(MUser)
+    res_post = userApi.post_user(MUser,)
     assert res_post.status_code == 200
     res_get = userApi.get_username(MUser.username)
     assert res_get.status_code == 200
     assert res_get.json() == res_post.json()
 
 
+
 def test_post_users(MUsers):
-   mylogger.info("test for create a list of new users")
+    mylogger.info("test for create a list of new users")
     mylogger.info("test post users")
-    mylogger.error("this test getting error!!!")
     users = [user.to_json() for user in MUsers]
     users_json = json.dumps(users)
     res_post = userApi.post_users_list(users_json)
     assert res_post.status_code == 200
+    for user_dict in MUsers:
+        assert user_dict == userApi.get_username(user_dict['username'])[1].to_json()
 
 
 def test_get_login(MUser):
@@ -215,9 +218,11 @@ def test_put_username(MUser):
     mylogger.info("test for put username")
     res_post = userApi.post_user(MUser)
     assert res_post.status_code == 200
-    MUser.username = "tamar"
-    res_put = userApi.put_username(MUser)
-    assert res_put.json()["name"] == MUser.username
+    username = MUser.username
+    MUser.username = "Deborah"
+    res_put = userApi.put_username(username, MUser)
+    assert res_put.status_code == 200
+    assert res_put.json()["username"] == MUser.username
 
 
 def test_delete_username(MUser):
